@@ -1,9 +1,11 @@
 import React, {Component} from 'react'
 import classes from './Quiz.module.css'
 import ActiveQuiz from '../../components/ActiveQuiz/ActiveQuiz'
+import FinishedQuiz from '../../components/FinishedQuiz/FinishedQuiz'
 
 class Quiz extends Component {
     state = {
+        isFinished: false,
         activeQuestion: 0,
         answerState: null,
         quiz: [
@@ -51,7 +53,9 @@ class Quiz extends Component {
 
             const timeout = window.setTimeout(() => {
                 if (this.isQuizFinished()) {
-                    console.log('finished')
+                    this.setState({
+                        isFinished: true
+                    })
                 } else {
                     this.setState({
                         activeQuestion: this.state.activeQuestion + 1,
@@ -76,15 +80,22 @@ class Quiz extends Component {
         return (
             <div className={classes.Quiz}>
                 <div className={classes.QuizWrapper}>
-                    <h1>Please answer all questions</h1>
-                    <ActiveQuiz 
-                        question={this.state.quiz[this.state.activeQuestion].question} 
-                        answers={this.state.quiz[this.state.activeQuestion].answers} 
-                        onAnswerClick={this.onAnswerClickHandler}
-                        quizLength={this.state.quiz.length}
-                        activeQuestion={this.state.activeQuestion + 1}
-                        state = {this.state.answerState}
-                    />
+                <h1>Please answer all questions</h1>
+                    {
+                        this.state.isFinished
+                        ? <FinishedQuiz
+
+                        />
+                        : <ActiveQuiz 
+                            question={this.state.quiz[this.state.activeQuestion].question} 
+                            answers={this.state.quiz[this.state.activeQuestion].answers} 
+                            onAnswerClick={this.onAnswerClickHandler}
+                            quizLength={this.state.quiz.length}
+                            activeQuestion={this.state.activeQuestion + 1}
+                            state = {this.state.answerState}
+                          />
+                    }
+
                 </div>
             </div>
         )
